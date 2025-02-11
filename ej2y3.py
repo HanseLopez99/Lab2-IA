@@ -6,7 +6,7 @@ import array
 
 
 # ejercicio 2
-def compare_samples(M1, M2, label1='Sample 1', label2='Sample 2'):
+def compare_samples(M1, M2, a = 0.5, label1='Sample 1', label2='Sample 2'):
     # Estimación de densidad
     kde1 = stats.gaussian_kde(M1)
     kde2 = stats.gaussian_kde(M2)
@@ -58,14 +58,14 @@ def compare_samples(M1, M2, label1='Sample 1', label2='Sample 2'):
     plt.show()
 
     print(f"Distancia KS: {ks_stat:.4f}, p-valor: {p_value:.4f}")
-    if p_value < 0.05:
-        print("Rechazamos H0: Las muestras son significativamente diferentes.")
+    if p_value < a:
+        print(f"Rechazamos H0: Con una significancia de {a} se puede asegurar que las muestras son significativamente diferentes.")
     else:
-        print("No se rechaza H0: No hay evidencia suficiente para afirmar que las muestras son diferentes.")
+        print(f"No se rechaza H0: Con una significancia de {a} No hay evidencia suficiente para afirmar que las muestras son diferentes.")
 
 
 # Ejercicio 3
-#
+
 
 areas = pd.read_csv('areas.csv', sep = ';')
 print(areas.shape)
@@ -81,4 +81,4 @@ n = len(ld1)
 np.random.seed(313)
 Munif = np.random.uniform(0, 1, n)
 Mbenford = np.floor(10**Munif).astype(int)
-compare_samples(Mbenford, Marea, label1='Distribucion de Benford', label2='primer dígito der area de paises (m)')
+compare_samples(Mbenford, Marea,0.01, label1='Distribucion de Benford', label2='primer dígito der area de paises (m)')

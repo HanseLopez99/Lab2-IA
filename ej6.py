@@ -59,21 +59,53 @@ def CompresSVDkb(Im):
     b = int((input('ingrese b: ')))
     l , C = Im.shape
     M = orden(Im,b)
-    U, S, V = lg.svd(Im, full_matrices=False)
+    U, S, V = lg.svd(M, full_matrices=False)
    # imk = reorden(Mc,b,l,C)
 
-    return U,S,V,b
-
-I = plt.imread('quetzal.png')
-I = ski.color.rgb2gray(I[:,:,:4])
-
-#I = (I*255).astype(np.uint8)
-
-U,S,V,k = CompresSVDkb(I)
-
-x = [i for i in range(len(S))]
-plt.plot(x,S)
-plt.show()
+    return U,S,V,b,l,C
 
 
-Icom = U[0:10] @ np.diad(S)[0:10] @ V[:10]
+
+
+############### ejemplos de uso #########################
+Imágenes = ["arbol.png",'quetzal.png','Cayala.JPG']
+
+for dirIm in Imágenes:
+    I = plt.imread(dirIm)
+    if I.shape[-1] >= 3:
+        I = I[:, :, :3]
+    I = ski.color.rgb2gray(I[:,:,:])
+
+    U, S, V, b, l, C = CompresSVDkb(I)
+
+    x = np.arange(len(S))
+
+    #
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 2, 1)
+    plt.plot(x, S / np.sum(S), marker='o', markersize=4, markevery=5)
+    plt.title("Tamaño de los valores singulares")
+    plt.xlabel("Índice de valores singulares")
+    plt.ylabel("Valor normalizado")
+
+
+    plt.subplot(1, 2, 2)
+    plt.plot(x, np.cumsum(S) / np.sum(S), marker='o', markersize=4, markevery=5)
+    plt.title("Cercanía con la imagen original")
+    plt.xlabel("Número de valores singulares")
+    plt.ylabel("Cercanía con la imágen original")
+
+    plt.tight_layout()
+    plt.show()
+
+    k = int(input("Elija el número de valores singulares a usar: k = "))
+    Icom = U[:, :k] @ np.diag(S[:k]) @ V[:k, :]
+
+    Icom = reorden(Icom, b, l, C)
+
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    ax[0].imshow(I, cmap="gray")
+    ax[0].set_title("Imagen Original")
+    ax[1].imshow(Icom, cmap="gray")
+    ax[1].set_title(f"Aproximación con k={k}")
+    plt.show()
