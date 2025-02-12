@@ -2,11 +2,31 @@ import numpy as np
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 import pandas as pd
-import array
+
+from ej1 import simular_lanzamientos
 
 
 # ejercicio 2
-def compare_samples(M1, M2, a = 0.5, label1='Sample 1', label2='Sample 2'):
+def compare_samples(M1, M2, a = 0.5, label1='Muestra 1', label2='Mestra 2'):
+    """
+        Compara dos muestras M1 y M2 usando graficas pp, graficas qq y Kolmogórov-Smirnov
+
+        Parámetros:
+        -----------
+        M1, M2 : array-like
+            Muestras de datos a comparar.
+        a : float, opcional (por defecto 0.5)
+            Significancia para la prueba de Kolmogórov-Smirnov
+        label1, label2 : str, opcional
+            Etiquetas para identificar las muestras en los gráficos.
+
+        Visualizaciones generadas:
+        --------------------------
+        1. **Densidad de probabilidad (KDE)**: Estima la densidad de cada muestra y resalta la distancia KS.
+        2. **Función de distribución acumulada (CDF)**: Muestra la CDF empírica de ambas muestras y la distancia KS.
+        3. **Gráfica PP (Probabilidad-Probabilidad)**: Relaciona las probabilidades acumuladas de ambas muestras.
+        4. **Gráfica QQ (Cuantil-Cuantil)**: Compara los cuantiles de ambas distribuciones.
+        """
     # Estimación de densidad
     kde1 = stats.gaussian_kde(M1)
     kde2 = stats.gaussian_kde(M2)
@@ -62,6 +82,15 @@ def compare_samples(M1, M2, a = 0.5, label1='Sample 1', label2='Sample 2'):
         print(f"Rechazamos H0: Con una significancia de {a} se puede asegurar que las muestras son significativamente diferentes.")
     else:
         print(f"No se rechaza H0: Con una significancia de {a} No hay evidencia suficiente para afirmar que las muestras son diferentes.")
+### probando funcion con resultado del ejercicio 1
+
+resultados1 = np.array(np.random.geometric(0.2, size=1000))
+
+resultados2 = np.array(simular_lanzamientos(0.2))
+
+compare_samples(resultados1,resultados2)
+
+#*******************************************************************************************
 
 
 # Ejercicio 3

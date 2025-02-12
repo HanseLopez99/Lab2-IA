@@ -1,11 +1,7 @@
 import matplotlib.pyplot as plt
-import matplotlib.image
 import numpy as np
-from skimage.color import rgb2gray
 import skimage as ski
 from scipy import linalg as lg
-from turtle import Shape
-#para ver las imagenes en escala de gris
 plt.rcParams['image.cmap'] = 'gray'
 
 
